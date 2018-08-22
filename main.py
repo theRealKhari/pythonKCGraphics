@@ -6,6 +6,9 @@ import array
 from math import pi
 import math
 
+#Fake enum for visual learning reasons. 
+X = 0
+Y = 1
 
 #Set Image size for the output image as a tuple. 
 imRes = (100,100)
@@ -13,55 +16,43 @@ output_img = [[100,0,0] for i in range(imRes[0]*imRes[1])]
 
 #function for setting pixels on screen. 
 def set_pixel(x,y,colorVector):
+	"""
+	sets color of 
+	"""
 	global output_img
 	output_img[kg.getPixel((x,y),imRes)] = colorVector
 
-def naiveLine(point1, point2, color):
-	delta_x = point2[0] - point1[0]
-	delta_y = point2[1] - point1[1]
+def dda_line(point1,point2,color):
+	"""
+	dda line drawing algorithm for learning purposes
+	"""
 
-	
-	if delta_x == 0:
-		print('vertical line detected')
-		#vertical line
-
-		delta_y = abs(delta_y)
-
-		start_y = max(point2[1],point1[1])
-		while delta_y > 0:
-			set_pixel(point1[0],start_y,color)
-			start_y -= 1
-			delta_y -=1
-
-	
-	elif delta_y == 0:
-		print('horizontal line detected')
-		#horizontal line
-		delta_x = abs(delta_x)
-
-		start_x = max(point2[0],point1[0])
-		while delta_x > 0:
-			set_pixel(start_x,point1[1],color)
-			start_x -= 1
-			delta_x -=1
-
-		pass
+	#Get difference between 2 points
+	deltaX = point2[X] - point1[X]
+	deltaY = point2[Y] - point1[Y]
 
 
+	#Calculate how many times you need to draw pixels to make the line. (steps)
 
+	if abs(deltaX) > abs(deltaY): 
+		Steps = abs(deltaX)
 	else:
-		slope = delta_y/delta_x
-
-		
-		if abs(slope) > 1:
-			#Steep case
-			pass
+		Steps = abs(deltaY)
 
 
-		else:
-			#Shallow case
-			pass
+	#Calculate the increment in x coordinatesand y coordinates.
 
+	Xincrement = deltaX / Steps
+	Yincrement = deltaY / Steps
+
+	#Set starting point for pixels to be from starting point 1:
+	xval = point1[X]
+	yval = point1[Y]
+
+	for step in range(Steps-1):
+		xval += Xincrement
+		yval += Yincrement
+		set_pixel(int(xval),int(yval),color)
 
 
 
@@ -73,11 +64,12 @@ Green = [0,255,0]
 White = [255,255,255]
 
 
-set_pixel(90,28,Green)
-set_pixel(60,10,[10,40,150])
+dda_line([90,28],[60,10],White)
 
-naiveLine((50,30),(50,94),White)
-naiveLine((50,60),(30,60),White)
+set_pixel(90,28,Green)
+set_pixel(60,10,Blue)
+
+
 
 #output_img[kg.getPixel((20,5),imRes)] = [0,10R0,100]R
 
